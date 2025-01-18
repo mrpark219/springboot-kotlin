@@ -1,0 +1,27 @@
+version: '2'
+
+services:
+  mysql:
+    image: mysql
+    container_name: mysql-springboot-kotlin
+    ports:
+      - "3306:3306"
+    environment:
+      - "MYSQL_ROOT_PASSWORD=1234"
+      - "TZ=Asia/Seoul"
+    command:
+      - --character-set-server=utf8mb4
+    volumes:
+      - /var/lib/docker/volumes/mysql/_data:/var/lib/mysql
+  spring-kotlin:
+    image: springboot-kotlin
+    container_name: server-springboot-kotlin
+    ports:
+      - "8080:8080"
+    environment:
+      - "SPRING_PROFILES_ACTIVE=docker"
+      - "jasypt.encryptor.key=q1w2e3"
+    volumes:
+      - /var/lib/docker/volumes/springboot-kotlin/_data:/tmp
+    depends_on:
+      - mysql
