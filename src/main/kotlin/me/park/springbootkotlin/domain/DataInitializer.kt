@@ -1,11 +1,11 @@
 package me.park.springbootkotlin.domain
 
 import jakarta.annotation.PostConstruct
-import me.park.springbootkotlin.domain.constant.SkillType
 import me.park.springbootkotlin.domain.constant.SkillType.*
 import me.park.springbootkotlin.domain.entity.*
 import me.park.springbootkotlin.domain.repository.*
 import org.springframework.context.annotation.Profile
+import org.springframework.security.crypto.password.PasswordEncoder
 import org.springframework.stereotype.Component
 import java.time.LocalDate
 
@@ -17,7 +17,9 @@ class DataInitializer(
     private val linkRepository: LinkRepository,
     private val skillRepository: SkillRepository,
     private val projectRepository: ProjectRepository,
-    private val experienceRepository: ExperienceRepository
+    private val experienceRepository: ExperienceRepository,
+    private val accountRepository: AccountRepository,
+    private val passwordEncoder: PasswordEncoder
 ) {
 
     @PostConstruct
@@ -205,5 +207,12 @@ class DataInitializer(
             )
         )
         projectRepository.saveAll(mutableListOf(project1, project2))
+
+        val account = Account(
+            loginId = "admin",
+            pw = passwordEncoder.encode("password")
+        )
+
+        accountRepository.save(account)
     }
 }
